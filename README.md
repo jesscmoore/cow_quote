@@ -6,6 +6,8 @@ Runs cow_quote to render random quote from fortune or my quote source as a cowsa
 
 *Author: Jess Moore*
 
+*License: MIT*
+
 ## Contents <!-- omit in toc -->
 
 - [Dependencies](#dependencies)
