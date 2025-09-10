@@ -6,7 +6,7 @@
 #
 # Usage: cow_quote.sh
 
-# shellcheck disable=SC2012 # Disable preference for find over ls
+# shellcheck disable=SC2012,SC2001 # Disable preference for find over ls
 
 QUOTE_FILE=~/quotes.json
 
@@ -29,12 +29,16 @@ QUOTE_FORT="$(fortune)"
 
 declare -a QUOTE_TYPES=("fortune" "own")
 QUOTE_TYPE_SEL="${QUOTE_TYPES[$RANDOM % 2]}"
-echo "Quote type selected: ${QUOTE_TYPE_SEL}"
+# echo "Quote type selected: ${QUOTE_TYPE_SEL}"
 
 if [ -f ${QUOTE_FILE} ] && [ "${QUOTE_TYPE_SEL}" == "own" ]; then
 
     # Random quote and author from user's quotes.json
     QUOTE_MY="$(cat $QUOTE_FILE  | jq -c '.[] | [.quote, .author]' | shuf -n 1 | sed 's/[][]//g')"
+    # Format author below quote
+    QUOTE_MY=$(echo "$QUOTE_MY" | sed 's/"\s*,\s*"/"\n\n--"/g')
+    # Remove surrounding double quote marks
+    QUOTE_MY=$(echo "$QUOTE_MY" | sed 's/"//g')
 
     QUOTE_SEL=$QUOTE_MY
     SOURCE_SEL="\n(Source: ~/quotes.json)."
