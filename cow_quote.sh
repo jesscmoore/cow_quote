@@ -6,6 +6,8 @@
 #
 # Usage: cow_quote.sh
 
+# shellcheck disable=SC2012 # Disable preference for find over ls
+
 QUOTE_FILE=~/quotes.json
 
 OS=$(uname)
@@ -20,28 +22,31 @@ case "${OS}" in
     echo "Supported operating systems: Linux, Darwin. Not";;
 esac
 
-if [[ -e ${QUOTE_FILE} ]]; then
 
-    # Random quote from fortune and my quotes.json
-    # Get quote from fortune
-    QUOTE_FORT="$(fortune)"
+# Random quote from fortune and my quotes.json
+# Get quote from fortune
+QUOTE_FORT="$(fortune)"
+
+declare -a QUOTE_TYPES=("fortune" "own")
+QUOTE_TYPE_SEL="${QUOTE_TYPES[$RANDOM % 2]}"
+echo "Quote type selected: ${QUOTE_TYPE_SEL}"
+
+if [ -f ${QUOTE_FILE} ] && [ "${QUOTE_TYPE_SEL}" == "own" ]; then
 
     # Random quote and author from user's quotes.json
     QUOTE_MY="$(cat $QUOTE_FILE  | jq -c '.[] | [.quote, .author]' | shuf -n 1 | sed 's/[][]//g')"
 
-    # Randomly select one of the 2 quotes:
-    declare -a QUOTES=("${QUOTE_FORT}" "${QUOTE_MY}")
-    QUOTE_SEL="${QUOTES[$RANDOM % 2]}"
-
-    # Output quote as cowsay/cowthink using all "cow" animals
-    echo "${QUOTE_SEL}" | $(ls ${COWS_BIN}/cow* | shuf -n 1) -f $(ls ${COWS_DIR} | shuf -n 1)
-
-    echo -e "\n(Source: fortune and my ~/quotes.json)."
+    QUOTE_SEL=$QUOTE_MY
+    SOURCE_SEL="\n(Source: ~/quotes.json)."
 
 else
 
-    # Old method: Random quote from fortune sources only
-    fortune | $(ls /usr/games/cow* | shuf -n 1) -f $(ls /usr/share/cowsay/cows/ | shuf -n 1)
-    echo -e "\n(Source: fortune quotes)."
+    QUOTE_SEL=$QUOTE_FORT
+    SOURCE_SEL="\n(Source: fortune quotes)."
 
 fi
+
+# Output quote as cowsay/cowthink using all "cow" animals
+echo "${QUOTE_SEL}" | $(ls "${COWS_BIN}"/cow* | shuf -n 1) -f "$(ls "${COWS_DIR}" | shuf -n 1)"
+
+echo -e "${SOURCE_SEL}"
