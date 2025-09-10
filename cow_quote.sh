@@ -27,7 +27,7 @@ function usage() {
     echo ""
     echo "Arguments:"
     echo "  -o own_quote_source: Source of owned quotes. One of 'json' or 'db'"
-    echo "                       (Default: 'json')."
+    echo "                       (Default: 'db')."
     echo "  -s source:           Chosen source, one of 'own' or 'fortune'. "
     echo "                       (Optional). By default source is randomly chosen."
     echo ""
@@ -39,7 +39,7 @@ if [[ $* == *"help"* || $* == *"-h"* ]]; then
 fi
 
 QUOTE_FILE=~/quotes.json
-OWN_QUOTE_SOURCE=json
+OWN_QUOTE_SOURCE=db
 
 # Parse arguments and flags
 while getopts :ho:s: opt; do
@@ -75,13 +75,10 @@ if [[ -z $QUOTE_TYPE_SEL ]]; then
     QUOTE_TYPE_SEL="${QUOTE_TYPES[$RANDOM % 2]}"
 
 fi
-echo "Quote type selected: ${QUOTE_TYPE_SEL}"
 
 # Fetch and format quote
 case "${QUOTE_TYPE_SEL}" in
 'own')
-
-    echo "Own quote source selected: ${OWN_QUOTE_SOURCE}"
 
     case "${OWN_QUOTE_SOURCE}" in
     'json')
@@ -100,9 +97,10 @@ case "${QUOTE_TYPE_SEL}" in
 
         else
 
-            echo "Error: quote file ${QUOTE_FILE} not found."
+            echo "Error: quote file ${QUOTE_FILE} not found. Using fortune instead."
             echo ""
-            usage
+            QUOTE_SEL="$(fortune)"
+            SOURCE_SEL="\n(Source: fortune quotes).";
 
         fi;;
 
@@ -117,9 +115,10 @@ case "${QUOTE_TYPE_SEL}" in
 
         else
 
-            echo "Error: 'db' option requires 'get_quote' from quote_engine."
+            echo "Error: 'db' option requires 'get_quote' from quote_engine. Using fortune instead."
             echo ""
-            usage;
+            QUOTE_SEL="$(fortune)"
+            SOURCE_SEL="\n(Source: fortune quotes).";
 
         fi;;
     *)
