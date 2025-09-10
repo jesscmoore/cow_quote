@@ -2,7 +2,7 @@
 
 <!-- markdownlint-disable-file MD001 MD029 MD036 MD041 -->
 
-Runs cow_quote to render fortune or my quote as cowsay or cowthink stdout graphic.
+Runs cow_quote to render random quote from fortune or my quote source as a cowsay or cowthink stdout graphic.
 
 *Author: Jess Moore*
 
@@ -16,16 +16,16 @@ Runs cow_quote to render fortune or my quote as cowsay or cowthink stdout graphi
 
 Required packages:
 
-- fortune - package of quotes
-- cowsay - package comprising cowsay and cowthink which render text as speech or thought bubble of random animal
+- `fortune` - package of quotes
+- `cowsay` - package comprising cowsay and cowthink which render text as speech or thought bubble of random animal
 
 Quote data sources:
 
 - fortune
 - quotes db (requires quote_engine repo to run quotes db in docker container)
-- ~/quotes.json
+- `$QUOTE_FILE` specified in `cow_quote.sh` (for format use template `quote_template.json`)
 
-Quotes db is the default quote source if own quote type is selected. However, defaults to source quote from fortune if quotes db fetch command get_quote not found, or if quote json selected and file not found.
+Quotes db is the default quote source if own quote type is selected. However, `cow_quote.sh` defaults to source the quote from fortune if quotes db fetch command `get_quote` not found, or if quote json selected and file not found.
 
 ## Install
 
@@ -36,7 +36,7 @@ chmod u+x cow_quote.sh
 ln -s cow_quote.sh ~/bin/cow_quote
 ```
 
-Add below to your ~/.zshrc or other shell config file which is sourced when new terminal is opened.
+Add below to your ~/.zshrc or other shell config file to run `cow_quote` when a new terminal is opened.
 
 ```bash
 # Requires: scripts/cow_quote.sh installed in ~/bin
@@ -45,19 +45,19 @@ cow_quote
 
 ## Options
 
-To source from quotes db use:
+To source a quote from quotes db use:
 
 ```bash
 cow_quote -s own -o db
 ```
 
-To source from quotes json use:
+To source a quote from quotes json file use:
 
 ```bash
 cow_quote -s own -o json
 ```
 
-To source from fortune quotes:
+To source a quote from fortune quotes:
 
 ```bash
 cow_quote -s fortune
