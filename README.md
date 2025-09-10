@@ -32,6 +32,7 @@ Quotes db is the default quote source if own quote type is selected. However, de
 Symlink cow_quote.sh to somewhere in your $PATH
 
 ```bash
+chmod u+x cow_quote.sh
 ln -s cow_quote.sh ~/bin/cow_quote
 ```
 
