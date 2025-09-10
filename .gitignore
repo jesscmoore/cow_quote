@@ -1,5 +1,6 @@
 # Privacy & Security
 *.env
+quotes.json
 
 # Miscellaneous
 *.class
